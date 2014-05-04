@@ -1,0 +1,70 @@
+#!/usr/bin/env ruby
+
+if RUBY_VERSION == '1.8.7'
+  require 'pathname'
+  ROOT_PATH = File.expand_path(File.join(File.dirname(Pathname.new(__FILE__).realpath.to_s), '..'))
+else
+  ROOT_PATH = File.expand_path(File.join(File.dirname(File.realpath(__FILE__)), '..'))
+end
+
+$LOAD_PATH.unshift File.join(ROOT_PATH, 'lib')
+
+require 'dev_env'
+require 'optparse'
+require 'ostruct'
+
+SUB_COMMANDS = %w(ln-to-bin)
+
+class OptParse
+  def self.parse(args)
+    options = OpenStruct.new
+    opt_parser = OptionParser.new do |opts|
+      opts.banner = <<-HELP.gsub(/^[ ]{8}/, '')
+        DevEnv: An somewhat opinionated developer environment.
+
+          Usage:
+            dev-env [SUBCOMMAND] [OPTIONS]
+
+              SUBCOMMANDS: #{SUB_COMMANDS.join(', ')}
+
+          Examples:
+            dev-env ln-to-bin --file cool_ruby_script.rb
+
+          Options:
+      HELP
+
+      opts.on('-f', '--file [FILE]', 'For use with link-to-bin.') do |file|
+        options.filename = file
+      end
+
+      opts.on_tail('--help', 'Display this message.') do
+        puts opts
+        exit 0
+      end
+
+      opts.on_tail('--version', 'Display current version.') do
+        puts "DevEnv: #{DevEnv::VERSION}"
+        exit 0
+      end
+    end
+    opt_parser.parse!(args)
+    options
+  end
+end
+
+begin
+  subcommand = ARGV.shift
+  unless (SUB_COMMANDS + %w(--help --version)).include? subcommand
+    fail OptionParser::InvalidOption, 'dev-env requires a subcommand'
+  end
+  ARGV.unshift '--help'    if ['--help'].include? subcommand
+  ARGV.unshift '--version' if ['--version'].include? subcommand
+  options = OptParse.parse(ARGV)
+  options.subcommand = subcommand
+rescue OptionParser::InvalidOption => error
+  puts "dev-env: #{error}"
+  puts "dev-env: try 'dev-env --help' for more information"
+  exit
+end
+
+DevEnv::App.run options
