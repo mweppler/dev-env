@@ -1,10 +1,8 @@
 source 'https://rubygems.org'
 
 gem 'rake'
+gem 'ostruct' # removed from Ruby's default gems in 4.0; used by ln-to-bin + the CLI
 
 group :development, :test do
-  gem 'minitest'
-  gem 'mime-types', '1.17'
-  gem 'simplecov', '~> 0.7.1'
-  gem 'coveralls', :require => false
+  gem 'minitest', '~> 5.25'
 end

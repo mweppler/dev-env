@@ -6,7 +6,7 @@ class TestShellCustomizations < DevEnv::TestCase
   end
 
   def teardown
-    File.delete @rc_file if File.exists? @rc_file
+    File.delete @rc_file if File.exist? @rc_file
   end
 
   def test_set_env_var_for_ruby
@@ -28,7 +28,7 @@ class TestShellCustomizations < DevEnv::TestCase
     other_rc_file = File.expand_path('~/.my_other_var')
     expected = 'export my_var="my_var_val"'
     actual   = File.read(other_rc_file).chop
-    File.delete other_rc_file if File.exists? other_rc_file
+    File.delete other_rc_file if File.exist? other_rc_file
     assert_equal expected, actual
   end
 
@@ -44,7 +44,7 @@ class TestShellCustomizations < DevEnv::TestCase
     other_rc_file = File.expand_path('~/.my_other_var')
     expected = 'eval "my_var="my_var_val""'
     actual   = File.read(other_rc_file).chop
-    File.delete other_rc_file if File.exists? other_rc_file
+    File.delete other_rc_file if File.exist? other_rc_file
     assert_equal expected, actual
   end
 end

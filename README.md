@@ -1,100 +1,62 @@
-# DevEnv [![Build Status](https://travis-ci.org/mweppler/dev-env.png)](https://travis-ci.org/mweppler/dev-env) [![Coverage Status](https://coveralls.io/repos/mweppler/dev-env/badge.png)](https://coveralls.io/r/mweppler/dev-env)
+# DevEnv [![CI](https://github.com/mweppler/dev-env/actions/workflows/ci.yml/badge.svg)](https://github.com/mweppler/dev-env/actions/workflows/ci.yml)
 
-https://github.com/mweppler/dev-env
+<https://github.com/mweppler/dev-env>
 
----
+A small, opinionated bootstrapper for setting up a developer environment on a
+fresh macOS machine — scaffold the `~/developer` tree, install a base set of
+Homebrew packages, and link a set of generic dotfiles.
 
-## DESCRIPTION
+## Public / private split
 
-DevEnv: An somewhat opinionated developer environment.
+This is the **public, work-safe** base. It carries only generic config and no
+secrets, so it's safe to run on a work machine. Personal dotfiles, shell
+aliases, and secret helpers live in a separate private repo
+(`dev-env-priv`) that layers **on top** of this one — the shell sources a
+`public/` base and then a `private/` overlay.
 
-## Installation
+## Requirements
 
-## Usage
+- macOS
+- Ruby 3.2+ (this repo pins `.ruby-version` to 3.2.2)
+- [Homebrew](https://brew.sh)
 
-### rake install
+## Quickstart
 
-__What you can expect to happen__
+```sh
+# one-liner bootstrap (clones this repo, then runs the install task)
+curl -fsSL https://raw.githubusercontent.com/mweppler/dev-env/master/bootstrap.sh | bash
+```
 
-Install will for that the prereqresites are met:
+Or manually:
 
-* install homebrew
-    `ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go)"`
-* install xcode command line tools
-* install xcode
+```sh
+git clone https://github.com/mweppler/dev-env.git ~/.dev_env/dev-env
+cd ~/.dev_env/dev-env
+brew bundle            # install base packages from the Brewfile
+rake install           # scaffold dirs + link dotfiles
+```
 
-__Setup workspace and directories:__
+The base packages are declared in [`Brewfile`](Brewfile) — edit it to taste
+before running `brew bundle`.
 
-    mkdir -p developer/{bin,config,css,database,dev_env,java,javascript,keystore,php,projects,python,repos,ruby,shell,sources,toolkit}
+## `ln-to-bin`
 
-__Copy basic versions of `.bashrc`, `.bash_profile`, `.zshrc`, to `~/developer/dot_files` and symlink them to `$HOME`__
+Symlink a script from your `public`/`private` script dirs into
+`~/developer/bin`, normalizing the name (`_` → `-`) and inferring the type from
+the extension:
 
-__Ask if you would like to install some recommended software:__
+```sh
+dev-env ln-to-bin --file cool_ruby_script.rb
+```
 
-* install git
-* install rbenv
-    `git clone https://github.com/sstephenson/rbenv.git ~/.rbenv`
-    `echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.zshrc`
-    `echo 'eval "$(rbenv init -)"' >> ~/.zshrc`
-    `source .zshrc`
-    `type rbenv`
-    `#=> "rbenv is a shell function"`
-* install ruby-build
-    `git clone https://github.com/sstephenson/ruby-build.git ~/.rbenv/plugins/ruby-build`
-    `rbenv rehash`
-    `rbenv install 1.9.3-p448`
-    `rbenv install 2.0.0-p247`
-* install iterm2
-    `curl -O http://www.iterm2.com/downloads/stable/iTerm2_v1_0_0.zip`
-* install oh-my-zsh
-    `curl -L https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh | sh`
-* install mvim
-    `brew install macvim`
-* install janus
-    `curl -Lo- https://bit.ly/janus-bootstrap | bash`
-    copy files from dotfiles: `.vimrc.before`, `.vimrc.after` & `.janus` to `$HOME`
-* install gems rails, bundler, pry, rspec, cucumber
-* install gem gollum (requires icu4c, which will: `brew install icu4c` for you)
-* install python, pip, virtualenv and virtualenvwrapper, & Django 1.6
-    `brew install python`
-    _pip is installed with brew install python_
-    `pip install virtualenvwrapper`
-    _add the following to startup shell script:_
-    `export WORKON_HOME=$HOME/.virtualenvs`
-    `export PROJECT_HOME=$HOME/directory-you-do-development-in`
-    `source /usr/local/bin/virtualenvwrapper.sh`
-    `pip install Django==1.6`
-* install node & npm
-    `brew install node`
-* install pow
-    `curl get.pow.cx | sh`
+## Development
 
-## REQUIREMENTS
+```sh
+bundle install
+rake test
+```
 
-Ruby 1.8.7 - 2.1.1
+## License
 
-## Tested
-
-__Install has been tested on the following platform(s)/version(s):__
-
-* Mac OS X 10.9, Ruby 2.1.1
-* Mac OS X 10.8, Ruby 1.8.7
-
-## COPYRIGHT
-
-    DevEnv: An somewhat opinionated developer environment.
-    Copyright (C) 2014  Matt Weppler
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+GPLv3. See [`LICENSE.txt`](LICENSE.txt).
+Copyright (C) 2014 Matt Weppler.

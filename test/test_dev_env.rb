@@ -45,7 +45,7 @@ class TestDevEnv < DevEnv::TestCase
     assert_equal expected, actual
   end
 
-  def test_priv_dirs
+  def test_pub_dirs
     expected = [
       'public/css',
       'public/dotfiles',

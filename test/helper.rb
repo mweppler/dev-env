@@ -1,12 +1,5 @@
-if ENV['COVERAGE']
-  require 'simplecov'
-  SimpleCov.start
-else
-  require 'coveralls'
-  Coveralls.wear!
-end
-
 require 'minitest/autorun'
+require 'minitest/mock' # provides #stub; not auto-loaded by minitest >= 6
 require 'minitest/pride'
 
 require 'dev_env'

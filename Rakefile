@@ -1,9 +1,4 @@
-if RUBY_VERSION == '1.8.7'
-  require 'pathname'
-  ROOT_PATH = File.expand_path(File.dirname(Pathname.new(__FILE__).realpath.to_s))
-else
-  ROOT_PATH = File.expand_path(File.dirname(File.realpath(__FILE__)))
-end
+ROOT_PATH = File.expand_path(File.dirname(File.realpath(__FILE__)))
 
 $LOAD_PATH.unshift File.join(ROOT_PATH, 'lib')
 
@@ -12,7 +7,7 @@ require 'rake/testtask'
 
 desc 'Run all the tests'
 Rake::TestTask.new do |t|
-  t.libs << %w(lib test)
+  t.libs << 'test'
   t.test_files = FileList['test/test_*.rb']
   t.verbose = true
 end
@@ -66,11 +61,11 @@ task :dotfiles do
 
     ln_dest = File.expand_path File.join(users_home, ".#{dotfile}")
     puts "copy #{ln_dest} to #{old_dots}"
-    FileUtils.mv ln_dest, old_dots if File.exists? ".#{ln_dest}"
+    FileUtils.mv ln_dest, old_dots if File.exist? ln_dest
 
     ln_src = File.expand_path File.join(new_dots, ".#{dotfile}")
     puts "link #{ln_src} to #{ln_dest}"
-    FileUtils.ln_s(ln_src, ln_dest) unless File.exists? ln_dest
+    FileUtils.ln_s(ln_src, ln_dest) unless File.exist? ln_dest
   end
 end
 
@@ -186,12 +181,12 @@ task :install_useful do
   if janus_resp == 'yes'
     %w(.vimrc.before .vimrc.after .janus).each do |vim_dot|
       ln = File.expand_path File.join(users_home, vim_dot)
-      File.delete ln if File.exists? ln
+      File.delete ln if File.exist? ln
     end
     DevEnv::Install.curl 'https://raw.github.com/carlhuda/janus/master/bootstrap.sh', :stream => true
     %w(.vimrc.before .vimrc.after .janus).each do |vim_dot|
       ln_src  = File.expand_path File.join(dotfile_path, vim_dot)
-      if File.exists? ln_src
+      if File.exist? ln_src
         ln_dest = File.expand_path File.join(users_home, vim_dot)
         FileUtils.ln_s(ln_src, ln_dest) unless File.exist? ln_dest
       end

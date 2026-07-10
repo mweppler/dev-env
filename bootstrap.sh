@@ -1,24 +1,28 @@
-#!/bin/sh
+#!/usr/bin/env bash
+set -euo pipefail
 
 die() {
-  echo "${@}"
+  echo "${@}" >&2
   exit 1
 }
 
-echo 'DevEnv: An somewhat opinionated developer environment.'
+echo 'DevEnv: A somewhat opinionated developer environment.'
 
-mkdir -p ~/.dev_env || die 'Could not create the directory: ~/.dev_env'
+REPO_URL="https://github.com/mweppler/dev-env.git"
+DEST="${HOME}/.dev_env/dev-env"
 
-cd ~/.dev_env
+mkdir -p "${HOME}/.dev_env" || die 'Could not create the directory: ~/.dev_env'
 
-if [[ $(which git) == 'git not found' ]]; then
-  curl -L -O https://www.dropbox.com/s/c81aayyz4sctkiq/dev-env.zip
-  mkdir dev-env
-  unzip dev-env.zip -d dev-env
-else
-  git clone https://github.com/mweppler/.dev-env.git ~/.dev_env/dev-env
+if ! command -v git >/dev/null 2>&1; then
+  die 'git not found. On macOS run `xcode-select --install` first, then re-run bootstrap.'
 fi
 
-cd ~/.dev_env/dev-env || die 'Could not change into the ~/.dev_env/dev-env'
+if [ -d "${DEST}/.git" ]; then
+  git -C "${DEST}" pull --ff-only
+else
+  git clone "${REPO_URL}" "${DEST}"
+fi
+
+cd "${DEST}" || die "Could not change into ${DEST}"
 
 rake install || die 'Rake failed.'
