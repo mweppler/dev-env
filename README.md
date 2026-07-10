@@ -32,12 +32,15 @@ Or manually:
 ```sh
 git clone https://github.com/mweppler/dev-env.git ~/.dev_env/dev-env
 cd ~/.dev_env/dev-env
-brew bundle            # install base packages from the Brewfile
-rake install           # scaffold dirs + link dotfiles
+bundle install
+rake install           # prereqs (Homebrew) -> scaffold dirs -> link dotfiles -> brew bundle
 ```
 
-The base packages are declared in [`Brewfile`](Brewfile) — edit it to taste
-before running `brew bundle`.
+`rake install` runs, in order: `prereqs` (installs Homebrew if missing),
+`dev_dirs` (scaffold the `~/developer` tree), `dotfiles` (link the generic
+dotfiles), and `packages` (`brew bundle`). Run any step on its own, e.g.
+`rake packages`. Base packages are declared in [`Brewfile`](Brewfile) — edit to
+taste.
 
 ## `ln-to-bin`
 

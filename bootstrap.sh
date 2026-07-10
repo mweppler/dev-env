@@ -25,4 +25,7 @@ fi
 
 cd "${DEST}" || die "Could not change into ${DEST}"
 
-rake install || die 'Rake failed.'
+# install this tool's own gems, then run the installer (prereqs -> dirs ->
+# dotfiles -> brew bundle).
+bundle install || die 'bundle install failed.'
+bundle exec rake install || die 'Rake failed.'
