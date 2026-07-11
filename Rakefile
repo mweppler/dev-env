@@ -70,7 +70,17 @@ task :dotfiles do
 end
 
 desc 'scaffold dirs, link dotfiles, and install base packages.'
-task :install => [:prereqs, :dev_dirs, :dotfiles, :packages]
+task :install => [:prereqs, :dev_dirs, :dotfiles, :shell_exts, :packages]
+
+desc 'link the public shell extensions into ~/developer/public/shell_exts.'
+task :shell_exts do
+  src  = File.join(ROOT_PATH, 'shell_exts')
+  dest = File.join(dev_path, 'public', 'shell_exts')
+  FileUtils.mkdir_p File.dirname(dest)
+  FileUtils.rm_f dest if File.symlink? dest
+  FileUtils.ln_s(src, dest) unless File.exist? dest
+  puts "link #{src} -> #{dest}"
+end
 
 desc 'install base packages from the Brewfile.'
 task :packages do

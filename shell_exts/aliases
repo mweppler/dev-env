@@ -1,0 +1,16 @@
+# Generic, work-safe aliases (public base). Personal aliases live in
+# dev-env-priv's shell_exts/aliases, which loads after this and can override.
+
+# listing
+alias l='ls -FG'
+alias ll='ls -lG'
+alias la='ls -AG'
+alias lla='ls -AlG'
+
+# navigation
+alias ..='cd ..'
+alias ...='cd ../..'
+
+# git
+alias g='git status'
+alias gl='git log --oneline --decorate --graph'

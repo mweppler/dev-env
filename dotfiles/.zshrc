@@ -6,9 +6,9 @@
 PATH=''
 
 # editors
-EDITOR='mvim -f'
-SVN_EDITOR='mvim -f'
-VISUAL='mvim -f'
+EDITOR='vim'
+SVN_EDITOR='vim'
+VISUAL='vim'
 
 # path
 PATH=$PATH:$HOME/developer/bin
@@ -26,17 +26,17 @@ if [ -f $ZSH/oh-my-zsh.sh ] ; then
   source $ZSH/oh-my-zsh.sh
 fi
 
-# Path to your sh extensions.
+# Shell extensions: source the PUBLIC base first, then the PRIVATE overlay
+# (dev-env-priv), so personal config can override the base.
+PUB_SH_EXTS=$HOME/developer/public/shell_exts
 PRIV_SH_EXTS=$HOME/developer/private/shell_exts
 
-PUB_SH_EXTS=$HOME/developer/public/shell_exts
-
-if [ -f $PRIV_SH_EXTS/main.sh ] ; then
-  source $PRIV_SH_EXTS/main.sh
+if [ -f $PUB_SH_EXTS/main ] ; then
+  source $PUB_SH_EXTS/main
 fi
 
-if [ -f $PUB_SH_EXTS/main.sh ] ; then
-  source $PUB_SH_EXTS/main.sh
+if [ -f $PRIV_SH_EXTS/main ] ; then
+  source $PRIV_SH_EXTS/main
 fi
 
 # use unset ENV_VAR to remove an environment variable (where ENV_VAR is something like PATH, etc.)

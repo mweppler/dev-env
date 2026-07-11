@@ -1,0 +1,13 @@
+# Public shell extensions — a small, work-safe base.
+#
+# This is the PUBLIC layer. The private overlay (dev-env-priv) is sourced
+# AFTER this one, so anything here can be overridden by your personal config.
+# Sources each sibling file if it exists.
+
+_pub_sh_exts_dir="${HOME}/developer/public/shell_exts"
+
+for _f in aliases functions; do
+  [ -f "${_pub_sh_exts_dir}/${_f}" ] && source "${_pub_sh_exts_dir}/${_f}"
+done
+
+unset _f _pub_sh_exts_dir
