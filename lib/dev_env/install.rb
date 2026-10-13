@@ -2,9 +2,21 @@ module DevEnv
   module Install
     extend self
 
-    # Is Homebrew available on PATH?
+    # Where Homebrew's installer puts brew (Apple Silicon, Intel). A fresh
+    # install doesn't add these to the PATH of the already-running process.
+    BREW_PATHS = %w(/opt/homebrew/bin/brew /usr/local/bin/brew)
+
+    # Path to the brew executable, or nil if Homebrew isn't installed.
+    def brew_path
+      on_path = %x(command -v brew 2> /dev/null).chomp
+      return on_path unless on_path.empty?
+
+      BREW_PATHS.find { |path| File.executable? path }
+    end
+
+    # Is Homebrew available?
     def brew_installed?
-      system('command -v brew > /dev/null 2>&1')
+      !brew_path.nil?
     end
 
     # Run Homebrew's official installer.
@@ -15,7 +27,10 @@ module DevEnv
     # Install everything declared in the given Brewfile.
     # Array form of system() so the path is never passed through a shell.
     def brew_bundle(brewfile)
-      system('brew', 'bundle', "--file=#{brewfile}")
+      brew = brew_path
+      return false if brew.nil?
+
+      system(brew, 'bundle', "--file=#{brewfile}")
     end
   end
 end

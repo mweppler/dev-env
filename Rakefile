@@ -94,6 +94,7 @@ task :prereqs do
   unless DevEnv::Install.brew_installed?
     puts 'Homebrew not found; installing it now...'
     DevEnv::Install.install_homebrew || die("Couldn't install Homebrew")
+    DevEnv::Install.brew_installed? || die("Homebrew installed, but couldn't find brew")
   end
   puts 'Prerequisites satisfied.'
 end

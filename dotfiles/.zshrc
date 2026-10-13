@@ -20,6 +20,11 @@ PATH=$PATH:/Applications
 # normal path stuff
 PATH=$PATH:/usr/bin:/bin:/usr/sbin:/sbin
 
+# homebrew on Apple Silicon lives outside the default path
+if [ -x /opt/homebrew/bin/brew ] ; then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
+
 ZSH=$HOME/.oh-my-zsh
 
 if [ -f $ZSH/oh-my-zsh.sh ] ; then

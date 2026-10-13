@@ -25,7 +25,16 @@ fi
 
 cd "${DEST}" || die "Could not change into ${DEST}"
 
-# install this tool's own gems, then run the installer (prereqs -> dirs ->
-# dotfiles -> brew bundle).
-bundle install || die 'bundle install failed.'
-bundle exec rake install || die 'Rake failed.'
+# run the installer (prereqs -> dirs -> dotfiles -> brew bundle). No bundler
+# here on purpose: a fresh Mac only has the system Ruby (2.6), whose bundler
+# can't satisfy Gemfile.lock. The install tasks need nothing beyond the rake
+# that ships with it; the Gemfile is for development/tests.
+#
+# Under `curl | bash` stdin is the pipe, not the terminal; Homebrew's installer
+# then goes non-interactive and can't prompt for sudo. Hand rake the terminal
+# when there is one.
+if [ ! -t 0 ] && (exec < /dev/tty) 2>/dev/null; then
+  rake install < /dev/tty || die 'Rake failed.'
+else
+  rake install || die 'Rake failed.'
+fi

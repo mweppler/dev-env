@@ -17,8 +17,9 @@ aliases, and secret helpers live in a separate private repo
 ## Requirements
 
 - macOS
-- Ruby 3.2+ (this repo pins `.ruby-version` to 3.2.2)
-- [Homebrew](https://brew.sh)
+- Any Ruby with `rake` to install — the macOS system Ruby is enough
+- Ruby 3.2+ for development/tests (this repo pins `.ruby-version` to 3.2.2)
+- [Homebrew](https://brew.sh) (installed for you if missing)
 
 ## Quickstart
 
@@ -32,7 +33,6 @@ Or manually:
 ```sh
 git clone https://github.com/mweppler/dev-env.git ~/.dev_env/dev-env
 cd ~/.dev_env/dev-env
-bundle install
 rake install           # prereqs (Homebrew) -> scaffold dirs -> link dotfiles -> brew bundle
 ```
 
