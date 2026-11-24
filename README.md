@@ -42,6 +42,23 @@ dotfiles), and `packages` (`brew bundle`). Run any step on its own, e.g.
 `rake packages`. Base packages are declared in [`Brewfile`](Brewfile) — edit to
 taste.
 
+## Omarchy (Linux)
+
+`omarchy/` holds the Omarchy layer: an agnoster-style bash prompt, vi mode for
+the shell, and a Neovim config ported from the old Janus vim setup. Run it on
+the Omarchy machine; it's safe to rerun, and to update, `git pull` and run it
+again:
+
+```sh
+git clone https://github.com/mweppler/dev-env.git ~/.dev_env/dev-env
+~/.dev_env/dev-env/omarchy/install.sh
+```
+
+It appends one line to `~/.bashrc` and to `~/.config/nvim/lua/config/{options,keymaps,autocmds}.lua`
+(each backed up once to `<file>.pre-dev-env`) and symlinks the Neovim files in.
+Omarchy's own files under `/usr/share/omarchy` are never touched. See the
+comments in each file for what was ported from macOS and what was left out.
+
 ## `ln-to-bin`
 
 Symlink a script from your `public`/`private` script dirs into

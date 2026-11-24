@@ -1,0 +1,29 @@
+# Vi mode for bash on Omarchy, loaded by rc after Omarchy's own inputrc, so
+# Omarchy's completion settings stay in effect.
+
+set editing-mode vi
+
+# Draw the agnoster-style [INSERT]/[NORMAL] block in front of the prompt and
+# switch the cursor shape: bar in insert, block in normal. \1...\2 wrap the
+# non-printing escapes so readline gets the prompt width right.
+set show-mode-in-prompt on
+set vi-ins-mode-string "\1\e[6 q\e[44;30m\2 [INSERT] \1\e[49;34m\2\1\e[0m\2"
+set vi-cmd-mode-string "\1\e[2 q\e[47;30m\2 [NORMAL] \1\e[49;37m\2\1\e[0m\2"
+
+# Esc to normal mode without the default half-second wait.
+set keyseq-timeout 50
+
+# Omarchy binds these in the emacs keymap only; keep them in vi mode.
+set keymap vi-insert
+"\e[A": history-search-backward
+"\e[B": history-search-forward
+"\C-l": clear-screen
+TAB: menu-complete
+"\e[Z": menu-complete-backward
+
+set keymap vi-command
+"\e[A": history-search-backward
+"\e[B": history-search-forward
+"\C-l": clear-screen
+
+# "v" in normal mode opens the current line in $EDITOR (readline's default).

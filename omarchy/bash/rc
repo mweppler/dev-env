@@ -1,0 +1,11 @@
+# dev-env: personal shell layer on top of Omarchy's bash defaults.
+# Sourced from the end of ~/.bashrc (installed by omarchy/install.sh), after
+# Omarchy's own rc, so anything here wins.
+
+__mw_dir=$(dirname "${BASH_SOURCE[0]}")
+
+set -o vi
+bind -f "$__mw_dir/inputrc"
+source "$__mw_dir/prompt.bash"
+
+unset __mw_dir
