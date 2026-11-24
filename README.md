@@ -54,7 +54,10 @@ git clone https://github.com/mweppler/dev-env.git ~/.dev_env/dev-env
 ~/.dev_env/dev-env/omarchy/install.sh
 ```
 
-It appends one line to `~/.bashrc` and to `~/.config/nvim/lua/config/{options,keymaps,autocmds}.lua`
+It creates the `~/developer` skeleton (`bin`, `config`, `projects`, `tmp`;
+repos are cloned into `projects` by hand, as needed), links
+`~/developer/private` once `dev-env-priv` is cloned to
+`~/developer/projects/dev-env/dev-env-priv`, appends one line to `~/.bashrc` and to `~/.config/nvim/lua/config/{options,keymaps,autocmds}.lua`
 (each backed up once to `<file>.pre-dev-env`) and symlinks the Neovim files in.
 Omarchy's own files under `/usr/share/omarchy` are never touched. See the
 comments in each file for what was ported from macOS and what was left out.

@@ -51,6 +51,28 @@ link() {
   say "linked  $dest"
 }
 
+# --- ~/developer skeleton -------------------------------------------------------
+# Same top-level dirs `rake dev_dirs` creates on a Mac (DevEnv.dev_dirs in
+# lib/dev_env.rb; keep the two lists in sync). Repos are cloned by hand, as
+# needed, into ~/developer/projects.
+for dir in bin config projects tmp; do
+  if [[ -d $HOME/developer/$dir ]]; then
+    say "ok      $HOME/developer/$dir"
+  else
+    mkdir -p "$HOME/developer/$dir"
+    say "created $HOME/developer/$dir"
+  fi
+done
+
+# ~/developer/private -> the dev-env-priv clone, as on the Mac. Only linked
+# once you've cloned it there; nothing is cloned for you.
+PRIV_REPO=$HOME/developer/projects/dev-env/dev-env-priv
+if [[ -d $PRIV_REPO/.git ]]; then
+  link "$PRIV_REPO" "$HOME/developer/private"
+else
+  say "skipped $HOME/developer/private: clone dev-env-priv to $PRIV_REPO first"
+fi
+
 # --- bash: prompt + vi mode ---------------------------------------------------
 append_once "$HOME/.bashrc" "[[ -r \"$HERE/bash/rc\" ]] && source \"$HERE/bash/rc\"" '#'
 

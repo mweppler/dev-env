@@ -4,6 +4,9 @@
 
 __mw_dir=$(dirname "${BASH_SOURCE[0]}")
 
+# Personal scripts, as on the Mac.
+[[ :$PATH: == *":$HOME/developer/bin:"* ]] || PATH=$HOME/developer/bin:$PATH
+
 set -o vi
 bind -f "$__mw_dir/inputrc"
 source "$__mw_dir/prompt.bash"
