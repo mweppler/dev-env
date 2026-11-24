@@ -1,3 +1,5 @@
+require 'fileutils'
+
 module DevEnv
   module Install
     extend self
@@ -31,6 +33,31 @@ module DevEnv
       return false if brew.nil?
 
       system(brew, 'bundle', "--file=#{brewfile}")
+    end
+
+    # Copy a dotfile into stage_dir and point dest (e.g. ~/.bashrc) at the copy.
+    #
+    # Anything already at dest is moved into backup_dir first. Safe to rerun:
+    # a dest that already links to the staged copy is left alone, and an
+    # earlier backup is never overwritten (a second one gets a timestamp).
+    #
+    # @return [Symbol] :linked, or :ok if it was already linked
+    def link_dotfile(src:, stage_dir:, dest:, backup_dir:)
+      FileUtils.mkdir_p stage_dir
+      staged = File.join(stage_dir, File.basename(src))
+      FileUtils.cp src, staged
+
+      return :ok if File.symlink?(dest) && File.readlink(dest) == staged
+
+      if File.exist?(dest) || File.symlink?(dest)
+        FileUtils.mkdir_p backup_dir
+        backup = File.join(backup_dir, File.basename(dest))
+        backup += ".#{Time.now.strftime('%Y%m%d%H%M%S')}" if File.exist?(backup) || File.symlink?(backup)
+        FileUtils.mv dest, backup
+      end
+
+      FileUtils.ln_s staged, dest
+      :linked
     end
   end
 end

@@ -49,21 +49,18 @@ end
 
 desc 'backup & link dotfiles files.'
 task :dotfiles do
+  stage_dir  = File.expand_path File.join(dev_path, 'dotfiles')
+  backup_dir = File.expand_path File.join(ROOT_PATH, '..', 'original_dotfiles')
+
   dotfiles.each do |dotfile|
-    copy_dots = File.expand_path File.join(ROOT_PATH, 'dotfiles', ".#{dotfile}")
-    new_dots  = File.expand_path File.join(dev_path, 'dotfiles')
-    old_dots  = File.expand_path File.join(ROOT_PATH, '..', 'original_dotfiles')
-
-    puts "copy #{copy_dots} to #{new_dots}"
-    FileUtils.cp copy_dots, new_dots
-
-    ln_dest = File.expand_path File.join(users_home, ".#{dotfile}")
-    puts "copy #{ln_dest} to #{old_dots}"
-    FileUtils.mv ln_dest, old_dots if File.exist? ln_dest
-
-    ln_src = File.expand_path File.join(new_dots, ".#{dotfile}")
-    puts "link #{ln_src} to #{ln_dest}"
-    FileUtils.ln_s(ln_src, ln_dest) unless File.exist? ln_dest
+    dest   = File.join(users_home, ".#{dotfile}")
+    result = DevEnv::Install.link_dotfile(
+      src:        File.join(ROOT_PATH, 'dotfiles', ".#{dotfile}"),
+      stage_dir:  stage_dir,
+      dest:       dest,
+      backup_dir: backup_dir
+    )
+    puts "#{result == :ok ? 'ok    ' : 'linked'} #{dest} -> #{File.join(stage_dir, ".#{dotfile}")}"
   end
 end
 
