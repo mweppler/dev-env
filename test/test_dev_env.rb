@@ -18,7 +18,7 @@ class TestDevEnv < DevEnv::TestCase
   end
 
   def test_dev_dirs
-    expected = %w(bin configs databases projects repos toolkit)
+    expected = %w(bin config projects tmp)
     actual   = DevEnv.dev_dirs
     assert_equal expected, actual
   end
@@ -26,37 +26,6 @@ class TestDevEnv < DevEnv::TestCase
   def test_dotfiles
     expected = %w(bash_profile bashrc zshrc)
     actual   = DevEnv.dotfiles
-    assert_equal expected, actual
-  end
-
-  def test_priv_dirs
-    expected = [
-      'private/css',
-      'private/dotfiles',
-      'private/javascript',
-      'private/keystore',
-      'private/php',
-      'private/python',
-      'private/ruby',
-      'private/shell',
-      'private/sources'
-    ]
-    actual   = DevEnv.priv_dirs
-    assert_equal expected, actual
-  end
-
-  def test_pub_dirs
-    expected = [
-      'public/css',
-      'public/dotfiles',
-      'public/javascript',
-      'public/php',
-      'public/python',
-      'public/ruby',
-      'public/shell',
-      'public/sources'
-    ]
-    actual   = DevEnv.pub_dirs
     assert_equal expected, actual
   end
 

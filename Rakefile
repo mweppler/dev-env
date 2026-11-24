@@ -45,8 +45,6 @@ task :dev_dirs do
   FileUtils.mkdir_p dev_path
   puts "creating directory: #{dev_path}"
   cp_dirs(dev_path, dev_dirs)
-  cp_dirs(dev_path, pub_dirs)
-  cp_dirs(dev_path, priv_dirs)
 end
 
 desc 'backup & link dotfiles files.'

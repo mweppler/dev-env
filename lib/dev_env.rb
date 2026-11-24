@@ -40,7 +40,7 @@ module DevEnv
   end
 
   def dev_dirs
-    %w(bin configs databases projects repos toolkit)
+    %w(bin config projects tmp)
   end
 
   def dev_path
@@ -65,18 +65,6 @@ module DevEnv
 
   def dev_env_path
     File.join ROOT_PATH, 'dev_env'
-  end
-
-  def priv_dirs
-    %w(css dotfiles javascript keystore php python ruby shell sources).map do |dir|
-      File.join 'private', dir
-    end
-  end
-
-  def pub_dirs
-    %w(css dotfiles javascript php python ruby shell sources).map do |dir|
-      File.join 'public', dir
-    end
   end
 
   # Quit with or without a message
